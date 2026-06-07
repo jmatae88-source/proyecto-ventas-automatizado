@@ -2,6 +2,18 @@ pipeline {
     agent any
     
     stages {
+        stage('Limpieza Previa') {
+            steps {
+                echo 'Limpiando contenedores existentes...'
+                bat 'docker rm -f db-ventas || echo "No existia contenedor previo"'
+                echo 'Limpiando estado de Terraform...'
+                dir('terraform') {
+                    bat 'rmdir /s /q .terraform 2>nul || echo "No habia .terraform"'
+                    bat 'del terraform.tfstate* 2>nul || echo "No habia state"'
+                }
+            }
+        }
+        
         stage('Infraestructura con Terraform') {
             steps {
                 echo 'Levantando Base de Datos con Terraform...'
@@ -9,8 +21,8 @@ pipeline {
                     bat 'terraform init'
                     bat 'terraform apply -auto-approve'
                 }
-                echo 'Esperando a que PostgreSQL inicie (15 segundos)...'
-                bat 'powershell -Command "Start-Sleep -Seconds 15"'
+                echo 'Esperando a que PostgreSQL inicie (20 segundos)...'
+                bat 'powershell -Command "Start-Sleep -Seconds 20"'
             }
         }
         
