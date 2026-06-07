@@ -36,6 +36,7 @@ conn = None
 try:
     conn = psycopg2.connect(
         host="localhost",
+        port=5434,
         database="ventas_db",
         user="admin",
         password="secret123"

@@ -15,7 +15,7 @@ resource "docker_container" "postgres_db" {
   
   ports {
     internal = 5432
-    external = 5432
+    external = 5434
   }
 
   env = [
